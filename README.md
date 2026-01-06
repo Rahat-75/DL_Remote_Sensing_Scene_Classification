@@ -1,76 +1,158 @@
-# EfficientNet-B0 Land Use Classification
+# DL_Remote_Sensing_Scene_Classification
 
-This project implements a land use classification pipeline using a pretrained EfficientNet-B0 architecture. It is designed to work with the UC Merced Land Use dataset but can be adapted for other image classification tasks.
+This repository contains the official PyTorch implementation of an EfficientNet-B0–based deep learning model for scene classification in remote sensing imagery.
+The implementation corresponds to the published research work titled:
 
-## Overview
+**“Deep Learning Approaches for Scene Classification in Remote Sensing Imagery”**
 
-The script [proposed\_\_model.py](proposed__model.py) performs the following:
+The project demonstrates that EfficientNet-B0 provides an excellent balance between classification accuracy, computational efficiency, and generalization when applied to high-resolution remote sensing datasets.
 
-- Loads and preprocesses the UC Merced Land Use dataset.
-- Fine-tunes a pretrained EfficientNet-B0 model.
-- Automatically handles training and validation splits.
-- Generates comprehensive performance visualizations and metric reports.
-- Saves the best-performing model based on validation loss.
+---
 
-## Requirements
+## Research Motivation
 
-To run this project, you need the following Python packages:
+Scene classification in remote sensing imagery plays a crucial role in urban planning, land-use analysis, environmental monitoring, and geospatial intelligence.
+Traditional convolutional neural networks often struggle to maintain high accuracy while remaining computationally efficient.
 
-- `torch`
-- `torchvision`
-- `numpy`
-- `matplotlib`
-- `scikit-learn`
-- `pillow`
+This work shows that EfficientNet-B0, when fine-tuned properly, can outperform deeper CNNs and hybrid architectures while requiring fewer parameters and lower computational cost.
 
-```bash
+---
+
+## Dataset
+
+The experiments are conducted on the **UC Merced Land Use Dataset**, which consists of:
+
+* 21 land-use scene categories
+* 100 RGB images per class
+* Total of 2100 images
+* Original image size: 256 × 256 pixels
+
+Images are resized to 224 × 224 pixels during preprocessing.
+
+Note:
+The dataset is not included in this repository due to licensing restrictions.
+Users must download it separately and place it in the directory specified in the configuration section of the code.
+
+---
+
+## Model Architecture
+
+* Backbone: EfficientNet-B0 (pretrained on ImageNet)
+* Classifier: Fully connected layer adapted to the number of land-use classes
+* Input resolution: 224 × 224 RGB images
+* Normalization: ImageNet mean and standard deviation
+
+---
+
+## Training Configuration
+
+The model is trained using the following setup:
+
+* Optimizer: AdamW
+* Loss function: Cross-Entropy Loss
+* Batch size: 32
+* Number of epochs: 10
+* Learning rate: 1e-4
+* Weight decay: 1e-4
+* Training / validation split: 80% / 20%
+
+All hyperparameters are managed through a centralized configuration class inside the training script for reproducibility and clarity.
+
+---
+
+## Installation
+
+Install the required Python packages using:
+
 pip install torch torchvision numpy matplotlib scikit-learn pillow
-```
 
-## Configuration
+The code supports both CPU and GPU execution.
+If a GPU is available, it will be used automatically.
 
-The model behavior can be customized in the `Config` class within [proposed\_\_model.py](proposed__model.py):
+---
 
-- `DATA_DIR`: Path to the UC Merced Land Use dataset (default: `./UC_Merced_LandUse`).
-- `OUTPUT_DIR`: Directory where models and plots are saved (default: `./outputs`).
-- `BATCH_SIZE`: Number of samples per training batch (default: `32`).
-- `NUM_EPOCHS`: Number of training iterations (default: `10`).
-- `LEARNING_RATE`: Initial learning rate for AdamW optimizer (default: `1e-4`).
-- `WEIGHT_DECAY`: Weight decay for regularization (default: `1e-4`).
-- `TRAIN_SPLIT`: Ratio of data used for training (default: `0.8`).
+## Project Structure
+
+DL_Remote_Sensing_Scene_Classification
+│
+├── Remote_Sensing_Scene.py
+├── README.md
+├── outputs/
+│   ├── efficientnet_best.pth
+│   ├── training_history.json
+│   ├── classification_report.txt
+│   ├── metrics.json
+│   ├── learning_curves.png
+│   ├── confusion_matrix.png
+│   └── prediction_distribution.png
+
+---
 
 ## Usage
 
-1. **Prepare Data**: Ensure the UC Merced Land Use dataset is located in the directory specified by `Config.DATA_DIR`.
-2. **Run Training**: Execute the script using Python:
-   ```bash
-   python proposed__model.py
-   ```
+1. Download the UC Merced Land Use Dataset.
+2. Place the dataset in the directory specified by the DATA_DIR variable in Remote_Sensing_Scene.py.
+3. Run the training script using:
+
+python Remote_Sensing_Scene.py
+
+The script automatically handles data loading, preprocessing, model training, evaluation, and result visualization.
+
+---
 
 ## Outputs
 
-After execution, the results are stored in the `./outputs` directory (or as configured):
+After execution, all results are saved in the outputs directory.
 
-### Model & History
+Model and logs:
 
-- `efficientnet_best.pth`: The weights of the best performing model.
-- `training_history.json`: Epoch-wise accuracy and loss values for both training and validation.
+* efficientnet_best.pth – Best model weights based on validation loss
+* training_history.json – Epoch-wise training and validation metrics
 
-### Metrics & Reports
+Evaluation reports:
 
-- `classification_report.txt`: Detailed per-class precision, recall, and F1-score.
-- `metrics.json`: Classification metrics in a machine-readable format.
+* classification_report.txt – Precision, recall, and F1-score for each class
+* metrics.json – Machine-readable evaluation metrics
 
-### Visualizations
+Visualizations:
 
-- `learning_curves.png`: Plots showing accuracy and loss trends over epochs.
-- `confusion_matrix.png`: A visualization of the model's predictions vs. actual labels.
-- `prediction_distribution.png`: A bar chart showing the frequency of predicted classes.
+* learning_curves.png – Training and validation accuracy and loss curves
+* confusion_matrix.png – Confusion matrix across all classes
+* prediction_distribution.png – Distribution of predicted classes
 
-## Model Details
+---
 
-- **Architecture**: EfficientNet-B0 (Pretrained on ImageNet).
-- **Optimizer**: AdamW.
-- **Loss Function**: Cross-Entropy Loss.
-- **Input Resolution**: 224x224 pixels.
-- **Normalization**: ImageNet standard (Mean: `[0.485, 0.456, 0.406]`, Std: `[0.229, 0.224, 0.225]`).
+## Experimental Results
+
+The EfficientNet-B0 model achieves near-perfect classification performance on the UC Merced dataset, with accuracy reaching approximately 99.5%, consistent with the published research findings.
+
+The model demonstrates strong generalization and minimal confusion between visually similar land-use categories.
+
+---
+
+## Reproducibility
+
+* Deterministic data splitting
+* Centralized configuration
+* Explicit saving of best model and evaluation metrics
+* Clear separation of training, validation, and evaluation stages
+
+This design ensures the experiments can be reliably reproduced and extended.
+
+---
+
+## Citation
+
+If you use this code or build upon it in your research, please cite the corresponding paper:
+
+M. H. Salman, Md. A. R. Rahat, A. Rahman, S. S. Khan, and Md. S. Rahman, “Deep Learning Approaches for Scene Classification in Remote Sensing Imagery,” Algorithms for Intelligent Systems, pp. 157–168, Oct. 2025, doi: https://doi.org/10.1007/978-981-96-7059-8_13.
+
+---
+
+## Author
+
+[Md. Abdul rabbi Rahat]
+Published Researcher in Deep Learning and Remote Sensing
+EfficientNet | CNNs | Vision Transformers | PyTorch
+
+---
