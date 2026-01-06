@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Outputs and trained models
+outputs/
+*.pth
+*.pt
+*.bin
+
+# Jupyter
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dataset (do not upload data)
+data/
+UC_Merced_LandUse/
